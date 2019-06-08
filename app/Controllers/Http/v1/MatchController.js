@@ -23,7 +23,7 @@ class MatchController extends BaseController {
     const oppositePlayerPiecesColor =
       String(match.white.user) === String(user._id) ? 'black' : 'white'
     match[oppositePlayerPiecesColor].pieces.map(piece => {
-      piece.strength = 'Hidden'
+      // piece.strength = 'Hidden'
       return piece
     })
 
@@ -52,7 +52,11 @@ class MatchController extends BaseController {
   }
 
   async movePiece({ request, response, params }) {
-    const { pieceId, position, positionNumber } = request.all()
+    const {
+      pieceId,
+      position: targetPosition,
+      positionNumber: targetPositionNumber
+    } = request.all()
     const { matchId } = params
 
     const user = request.user
@@ -61,8 +65,8 @@ class MatchController extends BaseController {
     const validPosition = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']
     const validPositionNumber = [8, 7, 6, 5, 4, 3, 2, 1]
     if (
-      !validPosition.includes(position) ||
-      !validPositionNumber.includes(positionNumber)
+      !validPosition.includes(targetPosition) ||
+      !validPositionNumber.includes(targetPositionNumber)
     ) {
       throw Error('Invalid Position')
     }
@@ -85,7 +89,7 @@ class MatchController extends BaseController {
       throw Error('Match has ended!')
     }
 
-    // Validate if newPosition is valid
+    // Validate if targetPosition is valid
 
     // Validate if it is user turn
     const blackOrWhite =
@@ -118,55 +122,44 @@ class MatchController extends BaseController {
 
     const pieceInTargetPositionIndex = match[opponentColor].pieces.findIndex(
       piece =>
-        piece.position === movingPiece.position &&
-        piece.positionNumber === movingPiece.positionNumber &&
+        piece.position === targetPosition && // FVCK!!!!!!! movingPiece.position to targetPosition is the fix and it took me hours to find it
+        piece.positionNumber === targetPositionNumber && // FVCK!!!!!!! movingPiece.positionNumber to targetPositionNumber is the fix and it took me hours to find it
         piece.isAlive
     )
+
     const pieceInTargetPosition =
       match[opponentColor].pieces[pieceInTargetPositionIndex]
 
     // Piece Collide Logic
-    if (!pieceInTargetPosition) {
-      console.log('NO COLLISION')
-      movingPiece.positionHistory.push({
-        position: movingPiece.position,
-        positionNumber: movingPiece.positionNumber
-      })
-      movingPiece.position = position
-      movingPiece.positionNumber = positionNumber
-    } else {
+    if (pieceInTargetPosition) {
       if (movingPiece.strength > pieceInTargetPosition.strength) {
-        console.log('YOU ARE EATINGG OTHER PLAYER')
         // Remove piece in target position
         match[opponentColor].pieces[pieceInTargetPositionIndex].isAlive = false
-
-        // Update moving piece location
-        movingPiece.positionHistory.push({
-          position: movingPiece.position,
-          positionNumber: movingPiece.positionNumber
-        })
-        movingPiece.position = position
-        movingPiece.positionNumber = positionNumber
       }
       if (movingPiece.strength < pieceInTargetPosition.strength) {
-        console.log('YOU HIT A BRICK')
         // Remove moving weakerMovingPiece
         match[blackOrWhite].pieces[movingPieceIndex].isAlive = false
       }
       if (movingPiece.strength === pieceInTargetPosition.strength) {
-        console.log('SAME STRENGTH')
         // Remove both pieces
         match[blackOrWhite].pieces[movingPieceIndex].isAlive = false
         match[opponentColor].pieces[pieceInTargetPositionIndex].isAlive = false
       }
     }
 
+    movingPiece.positionHistory.push({
+      position: movingPiece.position,
+      positionNumber: movingPiece.positionNumber
+    })
+    movingPiece.position = targetPosition
+    movingPiece.positionNumber = targetPositionNumber
+
     match = await match.save()
 
     // Send socket event to enemy player
     const opponentMatchData = Object.assign({}, match.toJSON())
     opponentMatchData[blackOrWhite].pieces.map(piece => {
-      piece.strength = 'Hidden'
+      // piece.strength = 'Hidden'
       return piece
     })
     this.SocketIo.in(match[opponentColor].user).emit(
@@ -176,7 +169,7 @@ class MatchController extends BaseController {
 
     // Hide opponent player Pieces
     match[opponentColor].pieces.map(piece => {
-      piece.strength = 'Hidden'
+      // piece.strength = 'Hidden'
       return piece
     })
 
