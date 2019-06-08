@@ -1,0 +1,28 @@
+{
+  "name": "api-jericopulvera",
+  "alias": "api-jericopulvera.now.sh",
+  "env": {
+    "HOST": "127.0.0.1",
+    "PORT": "3333",
+    "NODE_ENV": "production",
+    "APP_NAME": "api-jericopulvera.com",
+    "APP_URL": "http://${HOST}:${PORT}",
+    "APP_KEY": "VWS8KPOh3uIurDvpzZBr88xZuIcYResr",
+    "HASH_DRIVER": "bcrypt",
+    "DB_CONNECTION": "mongodb",
+    "MONGO_CONNECTION_STRING": "mongodb+srv://eco:asd123@cluster0-uc1ig.mongodb.net/jericopulvera?retryWrites=true",
+    "CLOUDINARY_NAME": "eco-cloud",
+    "CLOUDINARY_API_KEY": "387215472875965",
+    "CLOUDINARY_API_SECRET": "JKLxv2qyruYpJx3KTWGSrim0HSk",
+    "CLOUDINARY_API_URL": "https://api.cloudinary.com/v1_1/eco-cloud"
+  },
+  "scale": {
+    "sfo1": {
+      "min": 1,
+      "max": 1
+    }
+  },
+  "engines": {
+    "node": "^10.0.0"
+  }
+}
