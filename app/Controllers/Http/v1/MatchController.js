@@ -23,7 +23,7 @@ class MatchController extends BaseController {
     const oppositePlayerPiecesColor =
       String(match.white.user) === String(user._id) ? 'black' : 'white'
     match[oppositePlayerPiecesColor].pieces.map(piece => {
-      // piece.strength = 'Hidden'
+      piece.strength = '777'
       return piece
     })
 
@@ -132,19 +132,23 @@ class MatchController extends BaseController {
 
     // Piece Collide Logic
     if (pieceInTargetPosition) {
-      if (movingPiece.strength > pieceInTargetPosition.strength) {
-        // Remove piece in target position
+      // If Piece is same in strength
+      if (movingPiece.strength === pieceInTargetPosition.strength) {
+        match[blackOrWhite].pieces[movingPieceIndex].isAlive = false
         match[opponentColor].pieces[pieceInTargetPositionIndex].isAlive = false
       }
-      if (movingPiece.strength < pieceInTargetPosition.strength) {
+      // If moving Piece can defeat target Piece
+      if (canDefeat(movingPiece, pieceInTargetPosition)) {
+        // Remove piece in target position
+        match[opponentColor].pieces[pieceInTargetPositionIndex].isAlive = false
+      } else {
         // Remove moving weakerMovingPiece
         match[blackOrWhite].pieces[movingPieceIndex].isAlive = false
       }
-      if (movingPiece.strength === pieceInTargetPosition.strength) {
-        // Remove both pieces
-        match[blackOrWhite].pieces[movingPieceIndex].isAlive = false
-        match[opponentColor].pieces[pieceInTargetPositionIndex].isAlive = false
-      }
+    }
+
+    if (flagIsDefeated(match)) {
+      match.endedAt = Date.now()
     }
 
     movingPiece.positionHistory.push({
@@ -159,7 +163,7 @@ class MatchController extends BaseController {
     // Send socket event to enemy player
     const opponentMatchData = Object.assign({}, match.toJSON())
     opponentMatchData[blackOrWhite].pieces.map(piece => {
-      // piece.strength = 'Hidden'
+      piece.strength = '777'
       return piece
     })
     this.SocketIo.in(match[opponentColor].user).emit(
@@ -169,12 +173,23 @@ class MatchController extends BaseController {
 
     // Hide opponent player Pieces
     match[opponentColor].pieces.map(piece => {
-      // piece.strength = 'Hidden'
+      piece.strength = '777'
       return piece
     })
 
     return response.apiUpdated(match)
   }
 }
+
+function canDefeat(movingPiece, pieceInTargetPosition) {
+  // Spy special battle logic
+  if (movingPiece.strength === 0 && pieceInTargetPosition.strength > 2) {
+    return true
+  }
+
+  return movingPiece.strength > pieceInTargetPosition.strength
+}
+
+function flagIsDefeated(match) {}
 
 module.exports = MatchController

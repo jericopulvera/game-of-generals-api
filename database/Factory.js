@@ -49,27 +49,43 @@ Factory.blueprint('App/Models/Message', async (faker, i, passedData) => {
 
 const defaultPieces = whiteOrBlack => {
   const pieces = []
+  // -1 Flag
+  // 0 Spy
+  // 1 Private
+  // 2 Sergeant
+  // 3 2nd Lieutenant
+  // 4 1st Lieutenant
+  // 5 Captain
+  // 6 Major
+  // 7 Lt. Colonel
+  // 8 Colonel
+  // 9 Brigadier General
+  // 10 Major General
+  // 11 Lieutenant General
+  // 12 General
+  // 13 General of The Army
   const basePieces = [
     -1,
-    -1,
+    0,
+    0,
     1,
     1,
     1,
     1,
-    2,
-    2,
+    1,
+    1,
     2,
     3,
-    3,
     4,
-    4,
-    5,
     5,
     6,
     7,
     8,
     9,
-    10
+    10,
+    11,
+    12,
+    13
   ]
 
   let positionNumberBoundary = []
