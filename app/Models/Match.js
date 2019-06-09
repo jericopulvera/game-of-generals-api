@@ -43,21 +43,30 @@ class Match extends BaseModel {
   static get schema() {
     return {
       white: {
+        readyAt: {
+          type: Date,
+          default: null
+        },
         user: {
-          type: Schema.Types.ObjectId
-          // type: String
+          type: Schema.Types.ObjectId,
+          ref: 'User'
         },
         pieces: [pieceSchema]
       },
       black: {
+        readyAt: {
+          type: Date,
+          default: null
+        },
         user: {
-          type: Schema.Types.ObjectId
-          // type: String
+          type: Schema.Types.ObjectId,
+          ref: 'User'
         },
         pieces: [pieceSchema]
       },
       createdBy: {
         type: Schema.Types.ObjectId,
+        ref: 'User',
         required: true
       },
       createdAt: {

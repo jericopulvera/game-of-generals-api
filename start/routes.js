@@ -38,12 +38,19 @@ Route.post(
   '/v1/ConversationMessageController.store'
 )
 // .middleware(['throttle:10,10'])
-
+Route.get('/v1/matches', '/v1/MatchController.index')
+Route.get('/v1/my-matches', '/v1/MyMatchesController.index').middleware(
+  'customAuth'
+)
 Route.get('/v1/matches/:matchId', '/v1/MatchController.show').middleware(
   'customAuth'
 )
 Route.post('/v1/matches', '/v1/MatchController.store').middleware('customAuth')
 Route.patch(
   '/v1/matches/:matchId/move-piece',
-  '/v1/MatchController.movePiece'
+  '/v1/MatchMovePieceController.update'
+).middleware('customAuth')
+Route.patch(
+  '/v1/matches/:matchId/join-match',
+  '/v1/MatchJoinController.update'
 ).middleware('customAuth')

@@ -16,7 +16,7 @@ class DatabaseSeeder {
   async run() {
     await use('Mongoose').connection.dropDatabase()
     await new this.UserSeeder().run()
-    await new this.MatchSeeder().run()
+    // await new this.MatchSeeder().run()
   }
 }
 
