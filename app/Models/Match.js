@@ -1,18 +1,18 @@
-'use strict'
+"use strict";
 
-const BaseModel = use('MongooseModel')
-const { Schema } = use('Mongoose')
+const BaseModel = use("MongooseModel");
+const { Schema } = use("Mongoose");
 
 const pieceSchema = Schema({
   strength: {
     type: Number,
     enum: [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13] // Create On Collide Comparison Logic Later
   },
-  position: {
+  column: {
     type: String,
-    enum: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'] // Board positiom
+    enum: ["a", "b", "c", "d", "e", "f", "g", "h", "i"] // Board positiom
   },
-  positionNumber: {
+  row: {
     type: Number,
     enum: [1, 2, 3, 4, 5, 6, 7, 8]
   },
@@ -23,17 +23,17 @@ const pieceSchema = Schema({
   },
   positionHistory: [
     {
-      position: {
+      column: {
         type: String,
-        enum: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']
+        enum: ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
       },
-      positionNumber: {
+      row: {
         type: Number,
         enum: [1, 2, 3, 4, 5, 6, 7, 8]
       }
     }
   ]
-})
+});
 
 class Match extends BaseModel {
   static boot({ schema }) {}
@@ -49,7 +49,7 @@ class Match extends BaseModel {
         },
         user: {
           type: Schema.Types.ObjectId,
-          ref: 'User'
+          ref: "User"
         },
         pieces: [pieceSchema]
       },
@@ -60,13 +60,13 @@ class Match extends BaseModel {
         },
         user: {
           type: Schema.Types.ObjectId,
-          ref: 'User'
+          ref: "User"
         },
         pieces: [pieceSchema]
       },
       createdBy: {
         type: Schema.Types.ObjectId,
-        ref: 'User',
+        ref: "User",
         required: true
       },
       createdAt: {
@@ -82,8 +82,8 @@ class Match extends BaseModel {
       endedAt: {
         type: Date
       }
-    }
+    };
   }
 }
 
-module.exports = Match.buildModel('Match')
+module.exports = Match.buildModel("Match");

@@ -1,34 +1,34 @@
-const Factory = require('../Factory')
-const _this = use('App/Controllers/BaseController').instance()
+const Factory = require("../Factory");
+const _this = use("App/Controllers/BaseController").instance();
 
 class MatchSeeder {
   async run() {
-    await _this.Match.deleteMany({})
+    await _this.Match.deleteMany({});
 
-    const user = await _this.User.findOne({})
-    const user2 = await _this.User.findOne({}).sort({ createdAt: -1 })
+    const user = await _this.User.findOne({});
+    const user2 = await _this.User.findOne({}).sort({ createdAt: -1 });
 
-    await Factory.model('App/Models/Match').create({
+    await Factory.model("App/Models/Match").create({
       createdBy: user._id,
       white: { user: user._id },
       black: { user: user2._id }
-    })
+    });
     // const whitePrivate = {
     //   type: '1',
-    //   position: 'e',
-    //   positionNumber: 3,
+    //   column: 'e',
+    //   row: 3,
     //   positionHistory: []
     // }
     // const whiteGeneral = {
     //   type: '10',
-    //   position: 'f',
-    //   positionNumber: 3,
+    //   column: 'f',
+    //   row: 3,
     //   positionHistory: []
     // }
     // const blackPrivate = {
     //   type: '1',
-    //   position: 'e',
-    //   positionNumber: 6,
+    //   column: 'e',
+    //   row: 6,
     //   positionHistory: []
     // }
     // await _this.Match.create({
@@ -47,4 +47,4 @@ class MatchSeeder {
   }
 }
 
-module.exports = MatchSeeder
+module.exports = MatchSeeder;
