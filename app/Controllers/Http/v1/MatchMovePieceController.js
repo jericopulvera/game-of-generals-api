@@ -99,8 +99,10 @@ class MatchMovePiceController extends BaseController {
       }
     }
 
-    if (flagIsDefeated(match)) {
+    let winner = null;
+    if ((winner = flagIsDefeated(match))) {
       match.endedAt = Date.now();
+      match.winner = winner;
     }
 
     movingPiece.positionHistory.push({
@@ -115,6 +117,7 @@ class MatchMovePiceController extends BaseController {
     await match
       .populate("white.user")
       .populate("black.user")
+      .populate("winner")
       .execPopulate();
 
     // Send socket event to enemy player
@@ -171,6 +174,24 @@ function canCapture(movingPiece, pieceInTargetCell) {
   return movingPiece.strength > pieceInTargetCell.strength;
 }
 
-function flagIsDefeated(match) {}
+function flagIsDefeated(match) {
+  const whiteWins = match.white.pieces.find(
+    ({ strength, isAlive }) => strength === -1 && isAlive === false
+  );
+
+  if (whiteWins) {
+    return match.white.user;
+  }
+
+  const blackWins = match.black.pieces.find(
+    ({ strength, isAlive }) => strength === -1 && isAlive === false
+  );
+
+  if (blackWins) {
+    return match.black.user;
+  }
+
+  return false;
+}
 
 module.exports = MatchMovePiceController;

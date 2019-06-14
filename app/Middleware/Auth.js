@@ -4,7 +4,7 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 const BaseController = use("App/Controllers/BaseController");
 
-class CustomAuth extends BaseController {
+class Auth extends BaseController {
   /**
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -47,4 +47,4 @@ class CustomAuth extends BaseController {
   }
 }
 
-module.exports = CustomAuth;
+module.exports = Auth;

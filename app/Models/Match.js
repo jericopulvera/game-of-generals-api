@@ -64,6 +64,10 @@ class Match extends BaseModel {
         },
         pieces: [pieceSchema]
       },
+      winner: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
+      },
       createdBy: {
         type: Schema.Types.ObjectId,
         ref: "User",

@@ -11,10 +11,24 @@ class MatchController extends BaseController {
       limit = 10;
     }
 
-    const matches = await this.Match.find({
-      endedAt: null,
-      $or: [{ "white.user": null }, { "black.user": null }]
-    })
+    const conditions = {
+      endedAt: null
+    };
+
+    if (request.user) {
+      conditions.$or = [
+        {
+          "white.user": { $ne: request.user._id }
+        },
+        {
+          "black.user": { $ne: request.user._id }
+        }
+      ];
+    } else {
+      conditions.$or = [{ "white.user": null }, { "black.user": null }];
+    }
+
+    const matches = await this.Match.find(conditions)
       .limit(limit)
       .sort({ createdAt: -1 })
       .populate("white.user")
@@ -52,6 +66,7 @@ class MatchController extends BaseController {
     await match
       .populate("white.user")
       .populate("black.user")
+      .populate("createdBy")
       .execPopulate();
 
     return response.apiSuccess(match);
@@ -67,6 +82,15 @@ class MatchController extends BaseController {
         user: null
       }
     });
+
+    await match
+      .populate("white.user")
+      .populate("black.user")
+      .populate("createdBy")
+      .populate("winner")
+      .execPopulate();
+
+    this.SocketIo.emit("new-match", match);
 
     response.apiCreated(match);
   }
