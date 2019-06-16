@@ -48,6 +48,7 @@ class User extends BaseModel {
       role: {
         type: String,
         enum: ["admin", "user"],
+        default: "user",
         required: true
       }
     };

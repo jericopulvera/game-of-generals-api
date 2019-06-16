@@ -1,4 +1,4 @@
-'use strict'
+"use strict";
 
 /*
 |--------------------------------------------------------------------------
@@ -10,21 +10,21 @@
 |
 */
 
-const _ = use('lodash')
+const _ = use("lodash");
 
 class DatabaseSeeder {
   async run() {
-    await use('Mongoose').connection.dropDatabase()
-    await new this.UserSeeder().run()
+    await use("Mongoose").connection.dropDatabase();
+    // await new this.UserSeeder().run()
     // await new this.MatchSeeder().run()
   }
 }
 
 _.forEach(
-  use('Loader').load(`${use('Helpers').appRoot()}/database/seeders`),
+  use("Loader").load(`${use("Helpers").appRoot()}/database/seeders`),
   (value, key) => {
-    DatabaseSeeder.prototype[key] = value
+    DatabaseSeeder.prototype[key] = value;
   }
-)
+);
 
-module.exports = DatabaseSeeder
+module.exports = DatabaseSeeder;

@@ -42,7 +42,7 @@ class FacebookLoginController extends BaseController {
       response.apiSuccess({ token: token });
     } catch (error) {
       console.log(error);
-      throw this.UnAuthorizeException.invoke();
+      throw this.UnauthorizeException.invoke();
     }
   }
 }
