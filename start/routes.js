@@ -8,6 +8,7 @@ Route.get("/", () => {
 });
 
 // Auth
+Route.post("/v1/auth/facebook", "/v1/FacebookLoginController.store");
 Route.post("/v1/auth/login", "/v1/AuthController.login");
 Route.get("/v1/auth/me", "/v1/AuthController.me").middleware("auth");
 

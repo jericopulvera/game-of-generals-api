@@ -27,6 +27,12 @@ class User extends BaseModel {
         type: String,
         required: true
       },
+      fbId: {
+        type: String,
+        unique: true,
+        index: true,
+        sparse: true
+      },
       imageUrl: {
         type: String
       },
