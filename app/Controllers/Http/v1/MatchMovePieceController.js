@@ -159,10 +159,10 @@ class MatchMovePiceController extends BaseController {
 
 function canCapture(movingPiece, pieceInTargetCell) {
   // Spy special battle logic
-  if (movingPiece.strength === 0 && pieceInTargetCell.strength > 2) {
+  if (movingPiece.strength === 0 && pieceInTargetCell.strength > 1) {
     return true;
   }
-  if (pieceInTargetCell.strength === 0 && movingPiece.strength > 2) {
+  if (pieceInTargetCell.strength === 0 && movingPiece.strength > 1) {
     return false;
   }
 
